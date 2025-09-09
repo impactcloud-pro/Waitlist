@@ -1,3 +1,4 @@
+import logoImage from '/1.png'; 
 interface NavbarProps {
   onNavigate: (page: 'home' | 'register' | 'thank-you') => void;
   currentPage: 'home' | 'register' | 'thank-you';
@@ -39,7 +40,7 @@ export function Navbar({ onNavigate, currentPage }: NavbarProps) {
             className="text-brand-primary hover:opacity-80 transition-opacity cursor-pointer"
           >
             <img 
-              src="src/components/1.png" 
+              src={logoImage} 
               alt="سحابة الأثر" 
               className="h-8 w-8 md:h-10 md:w-10 object-contain"
             />
