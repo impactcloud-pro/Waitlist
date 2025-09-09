@@ -30,35 +30,35 @@ export function Navbar({ onNavigate, currentPage }: NavbarProps) {
   };
 
   return (
-    <nav className="bg-white w-full py-4 px-6 shadow-sm border-b border-gray-100 fixed top-0 left-0 right-0 z-50">
+    <nav className="bg-white w-full py-3 md:py-4 px-4 md:px-6 shadow-sm border-b border-gray-100 fixed top-0 left-0 right-0 z-50">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* الشعار في اليمين */}
         <div className="flex-shrink-0">
           <button 
             onClick={scrollToTop}
-            className="text-brand-primary hover:opacity-80 transition-opacity"
+            className="text-brand-primary hover:opacity-80 transition-opacity cursor-pointer"
           >
-            <h2 className="text-brand-primary font-bold text-2xl">سحابة الأثر</h2>
+            <h2 className="text-brand-primary font-bold text-xl md:text-2xl">سحابة الأثر</h2>
           </button>
         </div>
         
         {/* الروابط في اليسار */}
-        <div className="flex space-x-6 space-x-reverse items-center">
+        <div className="flex space-x-2 md:space-x-6 space-x-reverse items-center">
           <button 
             onClick={() => scrollToSection('mission')}
-            className="text-brand-primary hover:opacity-80 transition-opacity px-4 py-2 font-bold"
+            className="text-brand-primary hover:opacity-80 transition-opacity px-2 md:px-4 py-2 font-bold cursor-pointer text-sm md:text-base"
           >
             رسالتنا
           </button>
           <button 
             onClick={() => scrollToSection('services')}
-            className="text-brand-primary hover:opacity-80 transition-opacity px-4 py-2 font-bold"
+            className="text-brand-primary hover:opacity-80 transition-opacity px-2 md:px-4 py-2 font-bold cursor-pointer text-sm md:text-base"
           >
             خدماتنا
           </button>
           <button 
             onClick={() => onNavigate('register')}
-            className={`bg-brand-primary text-white hover:opacity-90 transition-opacity px-6 py-2 rounded-lg font-bold ${
+            className={`bg-brand-primary text-white hover:opacity-90 transition-opacity px-3 md:px-6 py-2 rounded-lg font-bold cursor-pointer text-sm md:text-base ${
               currentPage === 'register' ? 'opacity-100 shadow-lg' : ''
             }`}
           >

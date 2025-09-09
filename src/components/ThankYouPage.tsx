@@ -20,7 +20,7 @@ export function ThankYouPage({ onNavigate }: ThankYouPageProps) {
         <div className="max-w-7xl mx-auto text-center">
           <button 
             onClick={() => onNavigate('home')}
-            className="text-brand-primary hover:opacity-80 transition-opacity"
+            className="text-brand-primary hover:opacity-80 transition-opacity cursor-pointer"
           >
             <h2 className="text-brand-primary font-bold text-3xl">سحابة الأثر</h2>
           </button>
@@ -49,7 +49,7 @@ export function ThankYouPage({ onNavigate }: ThankYouPageProps) {
           <div className="mb-16">
             <button
               onClick={() => onNavigate('home')}
-              className="bg-brand-primary text-white px-10 py-4 rounded-xl hover:opacity-90 transition-all transform hover:scale-105 shadow-lg font-bold text-lg"
+              className="bg-brand-primary text-white px-10 py-4 rounded-xl hover:opacity-90 transition-all transform hover:scale-105 shadow-lg font-bold text-lg cursor-pointer"
             >
               العودة إلى الصفحة الرئيسية
             </button>

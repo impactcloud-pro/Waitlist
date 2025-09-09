@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { ChevronDown } from "lucide-react";
 
 interface RegisterPageProps {
   onNavigate: (page: 'home' | 'register' | 'thank-you') => void;
@@ -13,6 +13,8 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
     organization: '',
     country: ''
   });
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
 
   // قائمة الدول
   const countries = [
@@ -207,6 +209,24 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  // فلترة الدول حسب النص المكتوب
+  const filteredCountries = countries.filter(country =>
+    country.toLowerCase().includes(searchValue.toLowerCase()) ||
+    country.includes(searchValue)
+  );
+
+  const handleCountrySelect = (country: string) => {
+    handleInputChange('country', country);
+    setSearchValue(country);
+    setIsOpen(false);
+  };
+
+  const handleCountryInputChange = (value: string) => {
+    setSearchValue(value);
+    handleInputChange('country', value);
+    setIsOpen(value.length > 0);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // معالجة إرسال النموذج
@@ -216,24 +236,24 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
   };
 
   return (
-    <div className="min-h-screen pt-20">
+    <div className="min-h-screen pt-16 md:pt-20">
       {/* الهيدر */}
-      <section className="bg-brand-primary py-20 px-6">
+      <section className="bg-brand-primary py-12 md:py-20 px-4 md:px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-white font-bold text-4xl lg:text-5xl mb-8 leading-tight">
+          <h1 className="text-white font-bold text-2xl md:text-4xl lg:text-5xl mb-6 md:mb-8 leading-tight">
             انضم إلى قائمة الانتظار وكن من الأوائل فى تجربة سحابة الأثر
           </h1>
-          <p className="text-white opacity-90 leading-relaxed max-w-3xl mx-auto text-lg">
+          <p className="text-white opacity-90 leading-relaxed max-w-3xl mx-auto text-base md:text-lg">
             املأ النموذج التالى لتحصل على وصول مبكر وتجربة مميزة مع سحابة الأثر
           </p>
         </div>
       </section>
 
       {/* نموذج التسجيل */}
-      <section className="bg-gray-50 py-16 px-6">
+      <section className="bg-gray-50 py-12 md:py-16 px-4 md:px-6">
         <div className="max-w-2xl mx-auto">
-          <div className="bg-white rounded-3xl p-10 shadow-xl border border-gray-100">
-            <h2 className="text-brand-primary font-bold text-3xl mb-10 text-center">بيانات التسجيل</h2>
+          <div className="bg-white rounded-3xl p-6 md:p-10 shadow-xl border border-gray-100">
+            <h2 className="text-brand-primary font-bold text-2xl md:text-3xl mb-8 md:mb-10 text-center">بيانات التسجيل</h2>
             
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* الاسم الكامل */}
@@ -297,29 +317,55 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
               </div>
 
               {/* الدولة */}
-              <div dir="rtl">
+              <div dir="rtl" className="relative">
                 <label className="block text-brand-primary mb-3 font-bold text-lg text-right">
                   الدولة
                 </label>
-                <Select value={formData.country} onValueChange={(value) => handleInputChange('country', value)} required dir="rtl">
-                  <SelectTrigger className="w-full h-14 px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all text-lg bg-gray-50 hover:bg-white text-right custom-select-trigger" dir="rtl" style={{ height: '56px', minHeight: '56px' }}>
-                    <SelectValue placeholder="اختر الدولة" className="text-right" />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-60" dir="rtl">
-                    {countries.map((country) => (
-                      <SelectItem key={country} value={country} className="text-right cursor-pointer hover:bg-gray-50" dir="rtl">
-                        {country}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={searchValue}
+                    onChange={(e) => handleCountryInputChange(e.target.value)}
+                    onFocus={() => setIsOpen(true)}
+                    className="w-full h-14 px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all text-lg bg-gray-50 hover:bg-white text-right pr-12"
+                    placeholder="اكتب أو اختر الدولة"
+                    style={{ height: '56px', minHeight: '56px' }}
+                    dir="rtl"
+                    autoComplete="country"
+                  />
+                  <ChevronDown 
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" 
+                  />
+                  
+                  {isOpen && filteredCountries.length > 0 && (
+                    <div 
+                      className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto"
+                      dir="rtl"
+                    >
+                      {filteredCountries.slice(0, 10).map((country) => (
+                        <div
+                          key={country}
+                          onClick={() => handleCountrySelect(country)}
+                          className="px-5 py-3 hover:bg-gray-50 cursor-pointer text-right border-b border-gray-100 last:border-b-0 transition-colors"
+                        >
+                          {country}
+                        </div>
+                      ))}
+                      {filteredCountries.length > 10 && (
+                        <div className="px-5 py-2 text-center text-sm text-gray-500 border-t border-gray-200">
+                          اكتب المزيد لتضييق النتائج
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* زر الإرسال */}
               <div className="pt-6">
                 <button
                   type="submit"
-                  className="w-full bg-brand-primary text-white py-4 px-8 rounded-xl hover:opacity-90 transition-all transform hover:scale-105 shadow-lg font-bold text-lg text-center"
+                  className="w-full bg-brand-primary text-white py-4 px-8 rounded-xl hover:opacity-90 transition-all transform hover:scale-105 shadow-lg font-bold text-lg text-center cursor-pointer"
                 >
                   إرسال طلب التسجيل
                 </button>
