@@ -67,7 +67,7 @@ Deno.serve(async (req: Request) => {
     const resend = new Resend(resendApiKey);
     
     const emailResult = await resend.emails.send({
-      from: 'سحابة الأثر <noreply@resend.dev>',
+      from: 'سحابة الأثر <noreply@impactcloudpro.com>',
       to: [email],
       subject: '🎉 طلب تسجيلك مستلم',
       html: `
