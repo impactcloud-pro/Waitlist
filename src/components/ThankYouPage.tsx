@@ -1,3 +1,4 @@
+import logoImage from '/1.png'; 
 interface ThankYouPageProps {
   onNavigate: (page: 'home' | 'register' | 'thank-you') => void;
 }
@@ -22,7 +23,11 @@ export function ThankYouPage({ onNavigate }: ThankYouPageProps) {
             onClick={() => onNavigate('home')}
             className="text-brand-primary hover:opacity-80 transition-opacity cursor-pointer"
           >
-            <h2 className="text-brand-primary font-bold text-3xl">سحابة الأثر</h2>
+            <img 
+              src={logoImage} 
+              alt="سحابة الأثر" 
+              className="h-8 w-8 md:h-10 md:w-10 object-contain"
+            />
           </button>
         </div>
       </header>
