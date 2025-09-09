@@ -1,3 +1,4 @@
+i use api to sent email confirmation to the registered users now i want any one register using my domain to sent him a confirmation email:
 import { Resend } from 'npm:resend@3.2.0';
 
 const corsHeaders = {
@@ -12,20 +13,8 @@ interface EmailRequest {
   organization: string;
 }
 
-// Helper function to validate email format
-function isValidEmail(email: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-}
-
-// Helper function to sanitize input (prevent XSS in email content)
-function sanitizeInput(input: string): string {
-  return input.replace(/[<>]/g, '').trim();
-}
-
 Deno.serve(async (req: Request) => {
   try {
-    // Handle CORS preflight
     if (req.method === 'OPTIONS') {
       return new Response(null, {
         status: 200,
@@ -33,7 +22,6 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    // Only allow POST requests
     if (req.method !== 'POST') {
       return new Response(
         JSON.stringify({ error: 'Method not allowed' }),
@@ -47,12 +35,10 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // Check for API key
     const resendApiKey = Deno.env.get('RESEND_API_KEY');
     if (!resendApiKey) {
-      console.error('Missing RESEND_API_KEY environment variable');
       return new Response(
-        JSON.stringify({ error: 'Server configuration error' }),
+        JSON.stringify({ error: 'Missing RESEND_API_KEY environment variable' }),
         {
           status: 500,
           headers: {
@@ -63,32 +49,11 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // Parse and validate request body
-    let requestData: EmailRequest;
-    try {
-      requestData = await req.json();
-    } catch (error) {
-      return new Response(
-        JSON.stringify({ error: 'Invalid JSON in request body' }),
-        {
-          status: 400,
-          headers: {
-            'Content-Type': 'application/json',
-            ...corsHeaders,
-          },
-        }
-      );
-    }
+    const { name, email, organization }: EmailRequest = await req.json();
 
-    const { name, email, organization } = requestData;
-
-    // Validate required fields
     if (!name || !email || !organization) {
       return new Response(
-        JSON.stringify({ 
-          error: 'Missing required fields', 
-          required: ['name', 'email', 'organization'] 
-        }),
+        JSON.stringify({ error: 'Missing required fields: name, email, organization' }),
         {
           status: 400,
           headers: {
@@ -99,32 +64,11 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // Validate email format
-    if (!isValidEmail(email)) {
-      return new Response(
-        JSON.stringify({ error: 'Invalid email format' }),
-        {
-          status: 400,
-          headers: {
-            'Content-Type': 'application/json',
-            ...corsHeaders,
-          },
-        }
-      );
-    }
-
-    // Sanitize inputs to prevent XSS
-    const safeName = sanitizeInput(name);
-    const safeOrganization = sanitizeInput(organization);
-
+    // Fixed: Use Deno environment variable instead of process.env
     const resend = new Resend(resendApiKey);
     
-    // FIX: Use a verified domain or resend's default domain
-    // Replace 'send.impactcloudpro.com' with either:
-    // 1. 'onboarding@resend.dev' (Resend's default - works immediately)
-    // 2. Your verified domain from Resend dashboard
     const emailResult = await resend.emails.send({
-      from: 'سحابة الأثر <onboarding@resend.dev>', // ✅ Using Resend's verified domain
+      from: 'سحابة الأثر <noreply@resend.dev>',
       to: [email],
       subject: '🎉 طلب تسجيلك مستلم',
       html: `
@@ -135,10 +79,10 @@ Deno.serve(async (req: Request) => {
           </div>
           
           <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-            <h2 style="color: #18325a; font-size: 24px; margin: 0 0 20px 0; text-align: center;">مرحباً ${safeName}</h2>
+            <h2 style="color: #18325a; font-size: 24px; margin: 0 0 20px 0; text-align: center;">مرحباً ${name}</h2>
             
             <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0; text-align: center;">
-              لقد استلمنا طلب تسجيل منظمتك <strong style="color: #18325a;">${safeOrganization}</strong> وسنراجع البيانات قريباً.
+              لقد استلمنا طلب تسجيل منظمتك <strong style="color: #18325a;">${organization}</strong> وسنراجع البيانات قريباً.
             </p>
             
             <div style="background: #f8fafc; padding: 20px; border-radius: 8px; border-right: 4px solid #18325a; margin: 20px 0;">
@@ -166,24 +110,10 @@ Deno.serve(async (req: Request) => {
       `,
     });
 
-    // Better error handling for Resend API
     if (emailResult.error) {
-      console.error('Resend API error:', emailResult.error);
-      
-      // Return user-friendly error based on Resend error type
-      let userError = 'Failed to send email';
-      if (emailResult.error.message?.includes('domain is not verified')) {
-        userError = 'Email service configuration issue';
-      } else if (emailResult.error.message?.includes('rate limit')) {
-        userError = 'Too many requests, please try again later';
-      }
-      
+      console.error('Email sending failed:', emailResult.error);
       return new Response(
-        JSON.stringify({ 
-          error: userError,
-          // Only include details in development
-          ...(Deno.env.get('ENVIRONMENT') === 'development' && { details: emailResult.error })
-        }),
+        JSON.stringify({ error: 'Failed to send email', details: emailResult.error }),
         {
           status: 500,
           headers: {
@@ -194,8 +124,6 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    console.log('Email sent successfully:', emailResult.data?.id);
-    
     return new Response(
       JSON.stringify({ 
         success: true, 
@@ -212,14 +140,11 @@ Deno.serve(async (req: Request) => {
     );
 
   } catch (error) {
-    console.error('Unexpected error in send-email function:', error);
+    console.error('Error in send-email function:', error);
     return new Response(
       JSON.stringify({ 
-        error: 'Internal server error',
-        // Only show error details in development
-        ...(Deno.env.get('ENVIRONMENT') === 'development' && { 
-          details: error instanceof Error ? error.message : 'Unknown error' 
-        })
+        error: 'Internal server error', 
+        details: error instanceof Error ? error.message : 'Unknown error' 
       }),
       {
         status: 500,
