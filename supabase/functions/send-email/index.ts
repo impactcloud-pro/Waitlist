@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
     console.log('========================');
     
     const emailResult = await resend.emails.send({
-      from: 'سحابة الأثر <noreply@impactcloudpro.com>',
+      from: 'سحابة الأثر@impactcloudpro.com',
       to: [email],
       subject: '🎉 طلب تسجيلك مستلم',
       html: `
