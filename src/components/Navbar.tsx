@@ -39,10 +39,12 @@ export function Navbar({ onNavigate, currentPage }: NavbarProps) {
             className="text-brand-primary hover:opacity-80 transition-opacity cursor-pointer"
           >
             <img 
-              src="1.png" 
+              src="/1.png" 
               alt="سحابة الأثر" 
               className="h-8 w-8 md:h-10 md:w-10 object-contain"
             />
+          </button>
+        </div>
         
         {/* الروابط في اليسار */}
         <div className="flex space-x-2 md:space-x-6 space-x-reverse items-center">
