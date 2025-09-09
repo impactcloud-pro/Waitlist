@@ -1,5 +1,4 @@
 import { supabase, type RegistrationRequest } from '../lib/supabase'
-import { sendWelcomeEmail } from '../api/send-email'
 
 export interface RegistrationData {
   name: string
@@ -29,13 +28,28 @@ export async function submitRegistration(data: RegistrationData) {
       throw new Error('فشل في حفظ البيانات. يرجى المحاولة مرة أخرى.')
     }
 
-    // Send welcome email
+    // Send welcome email via Supabase Edge Function
     try {
-      await sendWelcomeEmail({
-        name: data.name,
-        email: data.email,
-        organization: data.organization
+      const emailResponse = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+        },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          organization: data.organization
+        })
       })
+
+      if (!emailResponse.ok) {
+        const errorData = await emailResponse.json()
+        console.error('Email API error:', errorData)
+      } else {
+        const emailResult = await emailResponse.json()
+        console.log('Email sent successfully:', emailResult)
+      }
     } catch (emailError) {
       console.error('Email error:', emailError)
       // Don't fail the entire process if email fails
