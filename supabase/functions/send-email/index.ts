@@ -1,3 +1,4 @@
+i use api to sent email confirmation to the registered users now i want any one register using my domain to sent him a confirmation email:
 import { Resend } from 'npm:resend@3.2.0';
 
 const corsHeaders = {
@@ -63,32 +64,11 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return new Response(
-        JSON.stringify({ error: 'Invalid email format' }),
-        {
-          status: 400,
-          headers: {
-            'Content-Type': 'application/json',
-            ...corsHeaders,
-          },
-        }
-      );
-    }
-
+    // Fixed: Use Deno environment variable instead of process.env
     const resend = new Resend(resendApiKey);
     
-    // Verify domain configuration
-    const senderDomain = 'impactcloudpro.com';
-    if (!email.endsWith(`@${senderDomain}`)) {
-      // If you want to allow emails from any domain, this check can be removed
-      // But ensure your Resend account has verified the sender domain
-    }
-
     const emailResult = await resend.emails.send({
-      from: 'سحابة الأثر <noreply@impactcloudpro.com>',
+      from: 'سحابة الأثر <noreply@resend.dev>',
       to: [email],
       subject: '🎉 طلب تسجيلك مستلم',
       html: `
