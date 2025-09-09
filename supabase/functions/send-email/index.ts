@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
     // Debug logging
     console.log('=== EMAIL DEBUG INFO ===');
     console.log('API Key (first 10 chars):', resendApiKey.substring(0, 10));
-    console.log('Sender email:', 'سحابة الأثر <noreply@impactcloudpro.com>');
+    console.log('Sender email:', 'سحابة الأثر@impactcloudpro.com');
     console.log('Recipient email:', email);
     console.log('========================');
     
