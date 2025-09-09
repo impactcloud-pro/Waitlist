@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ChevronDown } from "lucide-react";
+import { submitRegistration, type RegistrationData } from '../services/registrationService';
 
 interface RegisterPageProps {
   onNavigate: (page: 'home' | 'register' | 'thank-you') => void;
@@ -15,6 +16,8 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
   });
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
   // قائمة الدول
   const countries = [
@@ -227,12 +230,42 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
     setIsOpen(value.length > 0);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // معالجة إرسال النموذج
-    console.log('Form data:', formData);
-    // التوجه إلى صفحة الشكر
-    onNavigate('thank-you');
+    
+    if (isSubmitting) return;
+    
+    setIsSubmitting(true);
+    setSubmitMessage(null);
+    
+    try {
+      const registrationData: RegistrationData = {
+        name: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        organization: formData.organization,
+        country: formData.country || searchValue
+      };
+      
+      const result = await submitRegistration(registrationData);
+      
+      if (result.success) {
+        setSubmitMessage({ type: 'success', text: result.message });
+        // التوجه إلى صفحة الشكر بعد ثانيتين
+        setTimeout(() => {
+          onNavigate('thank-you');
+        }, 2000);
+      } else {
+        setSubmitMessage({ type: 'error', text: result.message });
+      }
+    } catch (error) {
+      setSubmitMessage({ 
+        type: 'error', 
+        text: 'حدث خطأ في الإرسال. يرجى المحاولة مرة أخرى.' 
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -256,6 +289,17 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
             <h2 className="text-brand-primary font-bold text-2xl md:text-3xl mb-8 md:mb-10 text-center">بيانات التسجيل</h2>
             
             <form onSubmit={handleSubmit} className="space-y-8">
+              {/* رسالة النجاح أو الخطأ */}
+              {submitMessage && (
+                <div className={`p-4 rounded-xl text-center font-medium ${
+                  submitMessage.type === 'success' 
+                    ? 'bg-green-100 text-green-800 border border-green-200' 
+                    : 'bg-red-100 text-red-800 border border-red-200'
+                }`}>
+                  {submitMessage.text}
+                </div>
+              )}
+              
               {/* الاسم الكامل */}
               <div>
                 <label className="block text-brand-primary mb-3 font-bold text-lg text-right">
@@ -265,8 +309,9 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
                   type="text"
                   value={formData.fullName}
                   onChange={(e) => handleInputChange('fullName', e.target.value)}
-                  className="w-full h-14 px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all text-lg bg-gray-50 hover:bg-white"
+                  className="w-full h-14 px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all text-lg bg-gray-50 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
                   placeholder="أدخل اسمك الكامل"
+                  disabled={isSubmitting}
                   required
                 />
               </div>
@@ -280,8 +325,9 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
                   type="email"
                   value={formData.email}
                   onChange={(e) => handleInputChange('email', e.target.value)}
-                  className="w-full h-14 px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all text-lg bg-gray-50 hover:bg-white"
+                  className="w-full h-14 px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all text-lg bg-gray-50 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
                   placeholder="example@email.com"
+                  disabled={isSubmitting}
                   required
                 />
               </div>
@@ -295,8 +341,9 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => handleInputChange('phone', e.target.value)}
-                  className="w-full h-14 px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all text-lg bg-gray-50 hover:bg-white"
+                  className="w-full h-14 px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all text-lg bg-gray-50 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
                   placeholder="+966 XX XXX XXXX"
+                  disabled={isSubmitting}
                   required
                 />
               </div>
@@ -310,8 +357,9 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
                   type="text"
                   value={formData.organization}
                   onChange={(e) => handleInputChange('organization', e.target.value)}
-                  className="w-full h-14 px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all text-lg bg-gray-50 hover:bg-white"
+                  className="w-full h-14 px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all text-lg bg-gray-50 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
                   placeholder="أدخل اسم المنظمة"
+                  disabled={isSubmitting}
                   required
                 />
               </div>
@@ -327,11 +375,13 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
                     value={searchValue}
                     onChange={(e) => handleCountryInputChange(e.target.value)}
                     onFocus={() => setIsOpen(true)}
-                    className="w-full h-14 px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all text-lg bg-gray-50 hover:bg-white text-right pr-12"
+                    className="w-full h-14 px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all text-lg bg-gray-50 hover:bg-white text-right pr-12 disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder="اكتب أو اختر الدولة"
                     style={{ height: '56px', minHeight: '56px' }}
                     dir="rtl"
                     autoComplete="country"
+                    disabled={isSubmitting}
+                    required
                   />
                   <ChevronDown 
                     className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" 
@@ -365,9 +415,17 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
               <div className="pt-6">
                 <button
                   type="submit"
-                  className="w-full bg-brand-primary text-white py-4 px-8 rounded-xl hover:opacity-90 transition-all transform hover:scale-105 shadow-lg font-bold text-lg text-center cursor-pointer"
+                  disabled={isSubmitting}
+                  className="w-full bg-brand-primary text-white py-4 px-8 rounded-xl hover:opacity-90 transition-all transform hover:scale-105 shadow-lg font-bold text-lg text-center cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                 >
-                  إرسال طلب التسجيل
+                  {isSubmitting ? (
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      جاري الإرسال...
+                    </div>
+                  ) : (
+                    'إرسال طلب التسجيل'
+                  )}
                 </button>
 
               </div>
