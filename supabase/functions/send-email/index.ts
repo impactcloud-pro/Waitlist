@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
             <div style="background: #f8fafc; padding: 20px; border-radius: 8px; border-right: 4px solid #18325a; margin: 20px 0;">
               <h3 style="color: #18325a; font-size: 18px; margin: 0 0 10px 0;">ماذا يحدث الآن؟</h3>
               <ul style="color: #6b7280; margin: 0; padding-right: 20px;">
-                <li style="margin-bottom: 8px;">سيتواصل معك فريقنا خلال 24 ساعة</li>
+                <li style="margin-bottom: 8px;">سيتواصل معك فريقنا فور إنطلاق المنصة</li>
                 <li style="margin-bottom: 8px;">ستحصل على دعوة للوصول المبكر للمنصة</li>
                 <li>ستكون من أوائل من يجرب منصة سحابة الأثر</li>
               </ul>
@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
             
             <div style="text-align: center; margin-top: 30px;">
               <p style="color: #9ca3af; font-size: 14px; margin: 0;">
-                شكراً لثقتك في سحابة الأثر
+               شكراً لانضمامك إلى رحلة التغيير الإيجابي معنا
               </p>
             </div>
           </div>
