@@ -38,9 +38,11 @@ export function Navbar({ onNavigate, currentPage }: NavbarProps) {
             onClick={scrollToTop}
             className="text-brand-primary hover:opacity-80 transition-opacity cursor-pointer"
           >
-            <h2 className="text-brand-primary font-bold text-xl md:text-2xl">سحابة الأثر</h2>
-          </button>
-        </div>
+            <img 
+              src="1.png" 
+              alt="سحابة الأثر" 
+              className="h-8 w-8 md:h-10 md:w-10 object-contain"
+            />
         
         {/* الروابط في اليسار */}
         <div className="flex space-x-2 md:space-x-6 space-x-reverse items-center">
