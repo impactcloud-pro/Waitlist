@@ -63,11 +63,10 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // Fixed: Use Deno environment variable instead of process.env
     const resend = new Resend(resendApiKey);
     
     const emailResult = await resend.emails.send({
-      from: 'سحابة الأثر <noreply@impactcloudpro.com>',
+      from: 'سحابة الأثر <noreply@impactcloudpro.com>', // ← CHANGED: Use your verified domain
       to: [email],
       subject: '🎉 طلب تسجيلك مستلم',
       html: `
