@@ -11,7 +11,7 @@ export interface EmailRequest {
 export async function sendWelcomeEmail({ name, email, organization }: EmailRequest) {
   try {
     const { data, error } = await resend.emails.send({
-      from: 'سحابة الأثر <noreply@impactcloud.com>',
+      from: 'سحابة الأثر@impactcloud.com',
       to: [email],
       subject: '🎉 طلب تسجيلك مستلم',
       html: `
