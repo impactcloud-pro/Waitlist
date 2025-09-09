@@ -240,7 +240,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
                 <Bot className="w-6 h-6 md:w-8 md:h-8 text-brand-primary" />
               </div>
               <h3 className="text-brand-primary font-bold text-lg md:text-xl mb-3 md:mb-4 text-center">برق</h3>
-              <p className="text-gray-600 text-center leading-relaxed text-sm md:text-base">مساعدك الذكى فى تحقيق رؤى دقيقة تدعم قراراتك بثقة ووضوح</p>
+              <p className="text-gray-600 text-center leading-relaxed text-sm md:text-base">مساعدك بالذكاء الاصطناعي لاكتشاف رؤى عميقة تعزز نجاحك</p>
             </div>
           </div>
         </div>
