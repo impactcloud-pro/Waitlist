@@ -39,7 +39,7 @@ export function Navbar({ onNavigate, currentPage }: NavbarProps) {
             className="text-brand-primary hover:opacity-80 transition-opacity cursor-pointer"
           >
             <img 
-              src="/1.png" 
+              src="src/components/1.png" 
               alt="سحابة الأثر" 
               className="h-8 w-8 md:h-10 md:w-10 object-contain"
             />
