@@ -1,4 +1,6 @@
-import { Resend } from 'npm:resend@3.2.0';
+// api/send-email.ts (or api/send-email.js)
+import { Resend } from 'resend';
+import { NextRequest, NextResponse } from 'next/server';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -12,61 +14,43 @@ interface EmailRequest {
   organization: string;
 }
 
-Deno.serve(async (req: Request) => {
+export async function POST(req: NextRequest) {
   try {
-    if (req.method === 'OPTIONS') {
-      return new Response(null, {
-        status: 200,
-        headers: corsHeaders,
-      });
-    }
-
-    if (req.method !== 'POST') {
-      return new Response(
-        JSON.stringify({ error: 'Method not allowed' }),
-        {
-          status: 405,
-          headers: {
-            'Content-Type': 'application/json',
-            ...corsHeaders,
-          },
-        }
-      );
-    }
-
-    const resendApiKey = Deno.env.get('RESEND_API_KEY');
+    const resendApiKey = process.env.RESEND_API_KEY;
     if (!resendApiKey) {
-      return new Response(
-        JSON.stringify({ error: 'Missing RESEND_API_KEY environment variable' }),
-        {
+      return NextResponse.json(
+        { error: 'Missing RESEND_API_KEY environment variable' },
+        { 
           status: 500,
-          headers: {
-            'Content-Type': 'application/json',
-            ...corsHeaders,
-          },
+          headers: corsHeaders
         }
       );
     }
 
-    const { name, email, organization }: EmailRequest = await req.json();
+    const body: EmailRequest = await req.json();
+    const { name, email, organization } = body;
 
     if (!name || !email || !organization) {
-      return new Response(
-        JSON.stringify({ error: 'Missing required fields: name, email, organization' }),
-        {
+      return NextResponse.json(
+        { error: 'Missing required fields: name, email, organization' },
+        { 
           status: 400,
-          headers: {
-            'Content-Type': 'application/json',
-            ...corsHeaders,
-          },
+          headers: corsHeaders
         }
       );
     }
 
     const resend = new Resend(resendApiKey);
     
+    // Debug logging
+    console.log('=== EMAIL DEBUG INFO ===');
+    console.log('API Key (first 10 chars):', resendApiKey.substring(0, 10));
+    console.log('Sender email:', 'سحابة الأثر <noreply@impactcloudpro.com>');
+    console.log('Recipient email:', email);
+    console.log('========================');
+    
     const emailResult = await resend.emails.send({
-      from: 'سحابة الأثر <noreply@impactcloudpro.com>', // ← CHANGED: Use your verified domain
+      from: 'سحابة الأثر <noreply@impactcloudpro.com>',
       to: [email],
       subject: '🎉 طلب تسجيلك مستلم',
       html: `
@@ -110,47 +94,45 @@ Deno.serve(async (req: Request) => {
 
     if (emailResult.error) {
       console.error('Email sending failed:', emailResult.error);
-      return new Response(
-        JSON.stringify({ error: 'Failed to send email', details: emailResult.error }),
-        {
+      return NextResponse.json(
+        { error: 'Failed to send email', details: emailResult.error },
+        { 
           status: 500,
-          headers: {
-            'Content-Type': 'application/json',
-            ...corsHeaders,
-          },
+          headers: corsHeaders
         }
       );
     }
 
-    return new Response(
-      JSON.stringify({ 
+    return NextResponse.json(
+      { 
         success: true, 
         message: 'Email sent successfully',
         emailId: emailResult.data?.id 
-      }),
-      {
+      },
+      { 
         status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          ...corsHeaders,
-        },
+        headers: corsHeaders
       }
     );
 
   } catch (error) {
     console.error('Error in send-email function:', error);
-    return new Response(
-      JSON.stringify({ 
+    return NextResponse.json(
+      { 
         error: 'Internal server error', 
         details: error instanceof Error ? error.message : 'Unknown error' 
-      }),
-      {
+      },
+      { 
         status: 500,
-        headers: {
-          'Content-Type': 'application/json',
-          ...corsHeaders,
-        },
+        headers: corsHeaders
       }
     );
   }
-});
+}
+
+export async function OPTIONS() {
+  return new Response(null, {
+    status: 200,
+    headers: corsHeaders,
+  });
+}
