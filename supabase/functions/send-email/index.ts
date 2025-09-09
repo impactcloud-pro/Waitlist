@@ -63,8 +63,7 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const resend = new Resend(resendApiKey);
-
+    const resend = new Resend(process.env.RESEND_API_KEY)
     const emailResult = await resend.emails.send({
       from: 'سحابة الأثر <noreply@resend.dev>',
       to: [email],
