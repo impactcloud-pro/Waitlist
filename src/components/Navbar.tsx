@@ -42,7 +42,7 @@ export function Navbar({ onNavigate, currentPage }: NavbarProps) {
             <img 
               src={logoImage} 
               alt="سحابة الأثر" 
-                style={{ width: "120px", height: "auto" }} 
+              className="h-8 w-8 md:h-10 md:w-10 object-contain" 
             />
           </button>
         </div>
