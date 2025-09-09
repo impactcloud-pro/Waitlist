@@ -1,4 +1,3 @@
-i use api to sent email confirmation to the registered users now i want any one register using my domain to sent him a confirmation email:
 import { Resend } from 'npm:resend@3.2.0';
 
 const corsHeaders = {
