@@ -63,9 +63,30 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // Fixed: Use Deno environment variable instead of process.env
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid email format' }),
+        {
+          status: 400,
+          headers: {
+            'Content-Type': 'application/json',
+            ...corsHeaders,
+          },
+        }
+      );
+    }
+
     const resend = new Resend(resendApiKey);
     
+    // Verify domain configuration
+    const senderDomain = 'impactcloudpro.com';
+    if (!email.endsWith(`@${senderDomain}`)) {
+      // If you want to allow emails from any domain, this check can be removed
+      // But ensure your Resend account has verified the sender domain
+    }
+
     const emailResult = await resend.emails.send({
       from: 'سحابة الأثر <noreply@impactcloudpro.com>',
       to: [email],
