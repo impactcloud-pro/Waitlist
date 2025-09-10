@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
       to: [email],
       subject: '🎉 طلب تسجيلك مستلم',
       html: `
-        <div dir="rtl" style="font-family: 'Tajawal', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div dir="rtl" style="font-family: 'Cairo', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="background: linear-gradient(135deg, #18325a 0%, #2563eb 100%); padding: 40px 20px; border-radius: 12px; text-align: center; margin-bottom: 30px;">
             <h1 style="color: white; font-size: 28px; margin: 0; font-weight: bold;">سحابة الأثر</h1>
             <p style="color: rgba(255,255,255,0.9); font-size: 16px; margin: 10px 0 0 0;">منصة قياس الأثر الاجتماعي</p>

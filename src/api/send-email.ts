@@ -15,7 +15,7 @@ export async function sendWelcomeEmail({ name, email, organization }: EmailReque
       to: [email],
       subject: '🎉 طلب تسجيلك مستلم',
       html: `
-        <div dir="rtl" style="font-family: 'Tajawal', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8f9fa;">
+        <div dir="rtl" style="font-family: 'Cairo', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8f9fa;">
           <div style="background-color: #18325a; color: white; padding: 30px; border-radius: 15px 15px 0 0; text-align: center;">
             <h1 style="margin: 0; font-size: 28px; font-weight: bold;">سحابة الأثر</h1>
             <p style="margin: 10px 0 0 0; opacity: 0.9;">مدعومة من أثرنا</p>
