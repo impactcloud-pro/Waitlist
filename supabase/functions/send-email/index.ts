@@ -42,12 +42,6 @@ export async function POST(req: NextRequest) {
 
     const resend = new Resend(resendApiKey);
     
-    // Debug logging
-    console.log('=== EMAIL DEBUG INFO ===');
-    console.log('API Key (first 10 chars):', resendApiKey.substring(0, 10));
-    console.log('Sender email:', 'سحابة الأثر@impactcloudpro.com');
-    console.log('Recipient email:', email);
-    console.log('========================');
     
     const emailResult = await resend.emails.send({
       from: 'سحابة الأثر@impactcloudpro.com',
