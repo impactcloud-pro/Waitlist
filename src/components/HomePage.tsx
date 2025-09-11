@@ -1,3 +1,4 @@
+import logoImage from '/5.png';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 import { Bot } from 'lucide-react';
 
@@ -268,7 +269,11 @@ export function HomePage({ onNavigate }: HomePageProps) {
       <footer className="bg-brand-primary py-8 md:py-12 px-4 md:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
-            <h3 className="text-white font-bold text-lg md:text-xl mb-3 md:mb-4">سحابة الأثر</h3>
+            <img 
+              src={logoImage} 
+              alt="سحابة الأثر" 
+              className="h-12 w-auto md:h-16 lg:h-18 object-contain" 
+            />
             <p className="text-white opacity-90 mb-4 md:mb-6 text-sm md:text-base">
               مدعومة من أثرنا
             </p>
