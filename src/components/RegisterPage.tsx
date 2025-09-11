@@ -1,3 +1,4 @@
+import logoImage from '/5.png';
 import { useState } from 'react';
 import { ChevronDown } from "lucide-react";
 import { submitRegistration, type RegistrationData } from '../services/registrationService';
@@ -266,7 +267,12 @@ if (result.success) {
       <footer className="bg-brand-primary py-12 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
-            <h3 className="text-white font-bold text-xl mb-4">سحابة الأثر</h3>
+          <img 
+              src={logoImage} 
+              alt="سحابة الأثر" 
+              style={{ display: "block", margin: "0 auto" }}
+              className="h-12 w-auto md:h-16 lg:h-18 object-contain" 
+            />
             <p className="text-white opacity-90 mb-6">
               مدعومة من أثرنا
             </p>
