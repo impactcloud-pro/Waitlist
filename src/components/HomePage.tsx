@@ -268,10 +268,11 @@ export function HomePage({ onNavigate }: HomePageProps) {
       {/* الفوتر */}
       <footer className="bg-brand-primary py-8 md:py-12 px-4 md:px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="flex justify-center">
+          <div className="text-center">
             <img 
               src={logoImage} 
               alt="سحابة الأثر" 
+              style={{ display: "block", margin: "0 auto" }}
               className="h-12 w-auto md:h-16 lg:h-18 object-contain" 
             />
             <p className="text-white opacity-90 mb-4 md:mb-6 text-sm md:text-base">
