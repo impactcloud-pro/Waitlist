@@ -67,7 +67,6 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
         // التوجه إلى صفحة الشكر بعد ثانيتين
         setTimeout(() => {
           onNavigate('thank-you');
-        }, 2000);
       } else {
         setSubmitMessage({ type: 'error', text: result.message });
       }
