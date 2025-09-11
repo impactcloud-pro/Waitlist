@@ -231,12 +231,8 @@ if (result.success) {
                           {country}
                         </div>
                       ))}
-                      {filteredCountries.length > 10 && (
-                        <div className="px-5 py-2 text-center text-sm text-gray-500 border-t border-gray-200">
-                          اكتب المزيد لتضييق النتائج
+            
                         </div>
-                      )}
-                    </div>
                   )}
                 </div>
               </div>
