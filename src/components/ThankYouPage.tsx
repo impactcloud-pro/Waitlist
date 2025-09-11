@@ -1,4 +1,5 @@
-import logoImage from '/1.png'; 
+import logoImage from '/1.png';
+import fotterImage from '/5.png'; 
 interface ThankYouPageProps {
   onNavigate: (page: 'home' | 'register' | 'thank-you') => void;
 }
@@ -82,7 +83,12 @@ export function ThankYouPage({ onNavigate }: ThankYouPageProps) {
       <footer className="bg-brand-primary py-12 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
-            <h3 className="text-white font-bold text-xl mb-4">سحابة الأثر</h3>
+           <img 
+              src={fotterImage} 
+              alt="سحابة الأثر" 
+              style={{ display: "block", margin: "0 auto" }}
+              className="h-12 w-auto md:h-16 lg:h-18 object-contain" 
+            />
             <p className="text-white opacity-90 mb-6">
               مدعومة من أثرنا
             </p>
