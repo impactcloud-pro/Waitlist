@@ -82,11 +82,9 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
       
       const result = await submitRegistration(registrationData);
       
-      if (result.success) {
+if (result.success) {
         setSubmitMessage({ type: 'success', text: result.message });
-      
-        setTimeout(() => {
-          onNavigate('thank-you');
+        onNavigate('thank-you');
       } else {
         setSubmitMessage({ type: 'error', text: result.message });
       }
