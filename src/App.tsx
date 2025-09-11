@@ -14,12 +14,6 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState<'home' | 'register' | 'thank-you'>(() =>
     pathToPage(window.location.pathname)
   );
-    const handleNavigate = (page: 'home' | 'register' | 'thank-you') => {
-    setCurrentPage(page);
-    // الانتقال إلى أعلى الصفحة عند التنقل إلى صفحة جديدة
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   useEffect(() => {
     const handlePopState = () => {
       setCurrentPage(pathToPage(window.location.pathname));
@@ -32,6 +26,7 @@ export default function App() {
     const path = page === 'home' ? '/' : page === 'register' ? '/register' : '/thank-you';
     window.history.pushState({}, '', path);
     setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
