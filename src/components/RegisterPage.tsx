@@ -32,19 +32,39 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
   );
 
   const handleCountrySelect = (country: string) => {
-    handleInputChange('country', country);
+    setFormData(prev => ({ ...prev, country: country }));
     setSearchValue(country);
     setIsOpen(false);
   };
 
   const handleCountryInputChange = (value: string) => {
-    setSearchValue(value);
-    handleInputChange('country', value);
-    setIsOpen(value.length > 0);
+    // فقط السماح بالقيم التي تطابق بداية أسماء الدول أو جزء منها
+    const hasPartialMatch = countries.some(country => 
+      country.startsWith(value) || 
+      country.toLowerCase().startsWith(value.toLowerCase()) ||
+      country.includes(value) ||
+      country.toLowerCase().includes(value.toLowerCase())
+    );
+    if (hasPartialMatch || value === '') {
+      setSearchValue(value);
+      // فقط تحديث قيمة الدولة إذا كانت موجودة في القائمة بالضبط
+      if (countries.includes(value)) {
+        setFormData(prev => ({ ...prev, country: value }));
+      } else {
+        // إذا لم تكن موجودة بالضبط، امسح قيمة النموذج
+        setFormData(prev => ({ ...prev, country: '' }));
+      }
+      setIsOpen(value.length > 0);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // التحقق من أن الدولة مختارة من القائمة المحددة
+    if (!countries.includes(formData.country)) {
+      alert('يرجى اختيار دولة من القائمة المتاحة');
+      return;
+    }
     
     if (isSubmitting) return;
     
@@ -64,7 +84,7 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
       
       if (result.success) {
         setSubmitMessage({ type: 'success', text: result.message });
-        // التوجه إلى صفحة الشكر بعد
+      
         setTimeout(() => {
           onNavigate('thank-you');
       } else {
