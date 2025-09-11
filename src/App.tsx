@@ -14,6 +14,11 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState<'home' | 'register' | 'thank-you'>(() =>
     pathToPage(window.location.pathname)
   );
+    const handleNavigate = (page: 'home' | 'register' | 'thank-you') => {
+    setCurrentPage(page);
+    // الانتقال إلى أعلى الصفحة عند التنقل إلى صفحة جديدة
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   useEffect(() => {
     const handlePopState = () => {
