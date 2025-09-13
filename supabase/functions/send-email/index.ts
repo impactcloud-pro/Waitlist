@@ -4,7 +4,7 @@ import { Resend } from "npm:resend";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  "Access-Control-Allow-Headers": "Content-Type, X-Function-Key",
 };
 
 interface EmailRequest {
@@ -23,6 +23,18 @@ serve(async (req: Request): Promise<Response> => {
       JSON.stringify({ error: "Method not allowed" }),
       {
         status: 405,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      },
+    );
+  }
+
+  const functionKey = req.headers.get("x-function-key");
+  const validKey = Deno.env.get("EDGE_FUNCTION_KEY");
+  if (!functionKey || !validKey || functionKey !== validKey) {
+    return new Response(
+      JSON.stringify({ error: "Unauthorized" }),
+      {
+        status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       },
     );
