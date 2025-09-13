@@ -1,11 +1,10 @@
-// api/send-email.ts (or api/send-email.js)
-import { Resend } from 'resend';
-import { NextRequest, NextResponse } from 'next/server';
+import { serve } from "https://deno.land/std@1.369.0/http/server.ts";
+import { Resend } from "npm:resend";
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
 interface EmailRequest {
@@ -14,35 +13,47 @@ interface EmailRequest {
   organization: string;
 }
 
-export async function POST(req: NextRequest) {
+serve(async (req: Request): Promise<Response> => {
+  if (req.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  if (req.method !== "POST") {
+    return new Response(
+      JSON.stringify({ error: "Method not allowed" }),
+      {
+        status: 405,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      },
+    );
+  }
+
   try {
-    const resendApiKey = process.env.RESEND_API_KEY;
+    const resendApiKey = Deno.env.get("RESEND_API_KEY");
     if (!resendApiKey) {
-      return NextResponse.json(
-        { error: 'Missing RESEND_API_KEY environment variable' },
-        { 
+      return new Response(
+        JSON.stringify({ error: "Missing RESEND_API_KEY environment variable" }),
+        {
           status: 500,
-          headers: corsHeaders
-        }
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
       );
     }
 
-    const body: EmailRequest = await req.json();
-    const { name, email, organization } = body;
+    const { name, email, organization } = (await req.json()) as EmailRequest;
 
     if (!name || !email || !organization) {
-      return NextResponse.json(
-        { error: 'Missing required fields: name, email, organization' },
-        { 
+      return new Response(
+        JSON.stringify({ error: "Missing required fields: name, email, organization" }),
+        {
           status: 400,
-          headers: corsHeaders
-        }
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
       );
     }
 
     const resend = new Resend(resendApiKey);
-    
-    
+
     const emailResult = await resend.emails.send({
       from: 'سحابة الأثر@impactcloudpro.com',
       to: [email],
@@ -53,14 +64,14 @@ export async function POST(req: NextRequest) {
             <h1 style="color: white; font-size: 28px; margin: 0; font-weight: bold;">سحابة الأثر</h1>
             <p style="color: rgba(255,255,255,0.9); font-size: 16px; margin: 10px 0 0 0;">منصة قياس الأثر الاجتماعي</p>
           </div>
-          
+
           <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
             <h2 style="color: #18325a; font-size: 24px; margin: 0 0 20px 0; text-align: center;">مرحباً ${name}</h2>
-            
+
             <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0; text-align: center;">
               لقد استلمنا طلب تسجيل منظمتك <strong style="color: #18325a;">${organization}</strong> وسنراجع البيانات قريباً.
             </p>
-            
+
             <div style="background: #f8fafc; padding: 20px; border-radius: 8px; border-right: 4px solid #18325a; margin: 20px 0;">
               <h3 style="color: #18325a; font-size: 18px; margin: 0 0 10px 0;">ماذا يحدث الآن؟</h3>
               <ul style="color: #6b7280; margin: 0; padding-right: 20px;">
@@ -69,14 +80,14 @@ export async function POST(req: NextRequest) {
                 <li>ستكون من أوائل من يجرب منصة سحابة الأثر</li>
               </ul>
             </div>
-            
+
             <div style="text-align: center; margin-top: 30px;">
               <p style="color: #9ca3af; font-size: 14px; margin: 0;">
                شكراً لانضمامك إلى رحلة التغيير الإيجابي معنا
               </p>
             </div>
           </div>
-          
+
           <div style="text-align: center; margin-top: 20px;">
             <p style="color: #9ca3af; font-size: 12px; margin: 0;">
               © 2025 سحابة الأثر. جميع الحقوق محفوظة.
@@ -88,45 +99,38 @@ export async function POST(req: NextRequest) {
 
     if (emailResult.error) {
       console.error('Email sending failed:', emailResult.error);
-      return NextResponse.json(
-        { error: 'Failed to send email', details: emailResult.error },
-        { 
+      return new Response(
+        JSON.stringify({ error: 'Failed to send email', details: emailResult.error }),
+        {
           status: 500,
-          headers: corsHeaders
-        }
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        },
       );
     }
 
-    return NextResponse.json(
-      { 
-        success: true, 
+    return new Response(
+      JSON.stringify({
+        success: true,
         message: 'Email sent successfully',
-        emailId: emailResult.data?.id 
-      },
-      { 
+        emailId: emailResult.data?.id,
+      }),
+      {
         status: 200,
-        headers: corsHeaders
-      }
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      },
     );
-
   } catch (error) {
     console.error('Error in send-email function:', error);
-    return NextResponse.json(
-      { 
-        error: 'Internal server error', 
-        details: error instanceof Error ? error.message : 'Unknown error' 
-      },
-      { 
+    return new Response(
+      JSON.stringify({
+        error: 'Internal server error',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      }),
+      {
         status: 500,
-        headers: corsHeaders
-      }
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      },
     );
   }
-}
+});
 
-export async function OPTIONS() {
-  return new Response(null, {
-    status: 200,
-    headers: corsHeaders,
-  });
-}
