@@ -41,7 +41,7 @@ export async function submitRegistration(data: RegistrationData) {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+            'x-function-key': import.meta.env.VITE_EDGE_FUNCTION_KEY
           },
           body: JSON.stringify({
             name: data.name,
