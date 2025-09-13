@@ -16,5 +16,6 @@ export type RegistrationRequest = {
   phone: string
   organization: string
   country: string
+  city: string
   created_at?: string
 }

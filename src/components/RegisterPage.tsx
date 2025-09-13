@@ -14,7 +14,8 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
     email: '',
     phone: '',
     organization: '',
-    country: ''
+    country: '',
+    city: ''
   });
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -78,7 +79,8 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
         email: formData.email,
         phone: formData.phone,
         organization: formData.organization,
-        country: formData.country || searchValue
+        country: formData.country || searchValue,
+        city: formData.city
       };
       
       const result = await submitRegistration(registrationData);
@@ -235,14 +237,30 @@ if (result.success) {
             
                         </div>
                   )}
-                </div>
               </div>
+            </div>
 
-              {/* زر الإرسال */}
-              <div className="pt-6">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
+            {/* المدينة */}
+            <div>
+              <label className="block text-brand-primary mb-3 font-bold text-lg text-right">
+                المدينة
+              </label>
+              <input
+                type="text"
+                value={formData.city}
+                onChange={(e) => handleInputChange('city', e.target.value)}
+                className="w-full h-14 px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all text-lg bg-gray-50 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
+                placeholder="أدخل المدينة"
+                disabled={isSubmitting}
+                required
+              />
+            </div>
+
+            {/* زر الإرسال */}
+            <div className="pt-6">
+              <button
+                type="submit"
+                disabled={isSubmitting}
                   className="w-full bg-brand-primary text-white py-4 px-8 rounded-xl hover:opacity-90 transition-all transform hover:scale-105 shadow-lg font-bold text-lg text-center cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                 >
                   {isSubmitting ? (
