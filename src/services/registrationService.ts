@@ -6,6 +6,7 @@ export interface RegistrationData {
   phone: string
   organization: string
   country: string
+  city: string
 }
 
 export async function submitRegistration(data: RegistrationData) {
@@ -20,6 +21,7 @@ export async function submitRegistration(data: RegistrationData) {
             phone: data.phone,
             organization: data.organization,
             country: data.country,
+            city: data.city,
           },
         ])
         .select()
