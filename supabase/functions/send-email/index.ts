@@ -1,10 +1,14 @@
 import { serve } from "https://deno.land/std@1.369.0/http/server.ts";
 import { Resend } from "npm:resend";
 
+const allowedOrigins = [
+  "https://impactcloudpro.com",
+  "http://localhost:5173",
+];
+
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
 };
 
 interface EmailRequest {
@@ -14,8 +18,14 @@ interface EmailRequest {
 }
 
 serve(async (req: Request): Promise<Response> => {
+  const origin = req.headers.get("Origin") ?? "";
+  if (!allowedOrigins.includes(origin)) {
+    return new Response("Origin not allowed", { status: 403 });
+  }
+  const headers = { ...corsHeaders, "Access-Control-Allow-Origin": origin };
+
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers });
   }
 
   if (req.method !== "POST") {
@@ -23,7 +33,7 @@ serve(async (req: Request): Promise<Response> => {
       JSON.stringify({ error: "Method not allowed" }),
       {
         status: 405,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...headers, "Content-Type": "application/json" },
       },
     );
   }
@@ -35,7 +45,7 @@ serve(async (req: Request): Promise<Response> => {
         JSON.stringify({ error: "Missing RESEND_API_KEY environment variable" }),
         {
           status: 500,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...headers, "Content-Type": "application/json" },
         },
       );
     }
@@ -47,7 +57,7 @@ serve(async (req: Request): Promise<Response> => {
         JSON.stringify({ error: "Missing required fields: name, email, organization" }),
         {
           status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          headers: { ...headers, "Content-Type": "application/json" },
         },
       );
     }
@@ -103,7 +113,7 @@ serve(async (req: Request): Promise<Response> => {
         JSON.stringify({ error: 'Failed to send email', details: emailResult.error }),
         {
           status: 500,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          headers: { ...headers, 'Content-Type': 'application/json' },
         },
       );
     }
@@ -116,7 +126,7 @@ serve(async (req: Request): Promise<Response> => {
       }),
       {
         status: 200,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: { ...headers, 'Content-Type': 'application/json' },
       },
     );
   } catch (error) {
@@ -128,7 +138,7 @@ serve(async (req: Request): Promise<Response> => {
       }),
       {
         status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: { ...headers, 'Content-Type': 'application/json' },
       },
     );
   }
