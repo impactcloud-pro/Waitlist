@@ -1,5 +1,7 @@
 import logoImage from '/1.png';
-import fotterImage from '/5.png'; 
+import fotterImage from '/5.png';
+
+/** Confirmation screen shown after successful registration. */
 interface ThankYouPageProps {
   onNavigate: (page: 'home' | 'register' | 'thank-you') => void;
 }
@@ -20,13 +22,13 @@ export function ThankYouPage({ onNavigate }: ThankYouPageProps) {
       {/* Header */}
       <header className="bg-white w-full py-6 px-6 shadow-sm border-b border-gray-100">
         <div className="max-w-7xl mx-auto text-center">
-          <button 
+          <button
             onClick={() => onNavigate('home')}
             className="text-brand-primary hover:opacity-80 transition-opacity cursor-pointer"
           >
-            <img 
-              src={logoImage} 
-              alt="سحابة الأثر" 
+            <img
+              src={logoImage}
+              alt="سحابة الأثر"
               className="h-12 w-auto md:h-16 lg:h-18 object-contain"
             />
           </button>
@@ -44,7 +46,8 @@ export function ThankYouPage({ onNavigate }: ThankYouPageProps) {
           {/* الفقرة التوضيحية */}
           <div className="max-w-3xl mx-auto mb-12">
             <p className="text-gray-800 text-lg lg:text-xl leading-relaxed mb-6">
-              لقد استلمنا طلب التسجيل الخاص بك، وستكون من بين الأوائل الذين يحصلون على وصول مبكر وتجربة مميزة مع منصتنا.
+              لقد استلمنا طلب التسجيل الخاص بك، وستكون من بين الأوائل الذين
+              يحصلون على وصول مبكر وتجربة مميزة مع منصتنا.
             </p>
             <p className="text-gray-700 text-lg leading-relaxed">
               تابع بريدك الإلكتروني للحصول على التحديثات القادمة.
@@ -63,7 +66,9 @@ export function ThankYouPage({ onNavigate }: ThankYouPageProps) {
 
           {/* معلومات إضافية */}
           <div className="bg-gray-50 rounded-3xl p-8 max-w-2xl mx-auto">
-            <h3 className="text-brand-primary font-bold text-xl mb-4">ماذا يحدث الآن؟</h3>
+            <h3 className="text-brand-primary font-bold text-xl mb-4">
+              ماذا يحدث الآن؟
+            </h3>
             <div className="space-y-3 text-gray-700">
               <div className="text-center">
                 <span>سيتواصل معك فريقنا فور إنطلاق المنصة</span>
@@ -83,15 +88,13 @@ export function ThankYouPage({ onNavigate }: ThankYouPageProps) {
       <footer className="bg-brand-primary py-12 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
-           <img 
-              src={fotterImage} 
-              alt="سحابة الأثر" 
-              style={{ display: "block", margin: "0 auto" }}
-              className="h-12 w-auto md:h-16 lg:h-18 object-contain" 
+            <img
+              src={fotterImage}
+              alt="سحابة الأثر"
+              style={{ display: 'block', margin: '0 auto' }}
+              className="h-12 w-auto md:h-16 lg:h-18 object-contain"
             />
-            <p className="text-white opacity-90 mb-6">
-              مدعومة من أثرنا
-            </p>
+            <p className="text-white opacity-90 mb-6">مدعومة من أثرنا</p>
             <div className="border-t border-white border-opacity-20 pt-6">
               <p className="text-white opacity-70 text-sm">
                 © 2025 سحابة الأثر. جميع الحقوق محفوظة.
