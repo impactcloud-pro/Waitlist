@@ -1,7 +1,20 @@
 import logoImage from '/5.png';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  LineChart,
+  Line,
+} from 'recharts';
 import { Bot } from 'lucide-react';
 
+/** Home page showing impact metrics and navigation entry. */
 interface HomePageProps {
   onNavigate: (page: 'home' | 'register' | 'thank-you') => void;
 }
@@ -41,7 +54,10 @@ export function HomePage({ onNavigate }: HomePageProps) {
   return (
     <div className="min-h-screen pt-20">
       {/* القسم الرئيسي - Hero Section */}
-      <section id="hero" className="bg-brand-primary py-12 md:py-20 px-4 md:px-6">
+      <section
+        id="hero"
+        className="bg-brand-primary py-12 md:py-20 px-4 md:px-6"
+      >
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 items-center">
             {/* العمود الأيسر - النص */}
@@ -50,10 +66,12 @@ export function HomePage({ onNavigate }: HomePageProps) {
                 منصة قياس الأثر الاجتماعى الأولى عربياً
               </h1>
               <p className="text-white opacity-90 mb-8 md:mb-10 leading-relaxed max-w-2xl mx-auto lg:mx-0 text-base md:text-lg text-center lg:text-right">
-                أول منصّة عربية سحابية متخصصة في قياس وإدارة الأثر الاجتماعي، تجمع بين قوة البيانات وتقنيات الذكاء الاصطناعي لتقديم رؤى دقيقة وأكثر تأثيرًا
+                أول منصّة عربية سحابية متخصصة في قياس وإدارة الأثر الاجتماعي،
+                تجمع بين قوة البيانات وتقنيات الذكاء الاصطناعي لتقديم رؤى دقيقة
+                وأكثر تأثيرًا
               </p>
               <div className="text-center lg:text-right">
-                <button 
+                <button
                   onClick={() => onNavigate('register')}
                   className="bg-white text-brand-primary px-8 py-4 rounded-xl hover:bg-gray-50 transition-all transform hover:scale-105 shadow-lg font-bold text-lg cursor-pointer"
                 >
@@ -61,13 +79,15 @@ export function HomePage({ onNavigate }: HomePageProps) {
                 </button>
               </div>
             </div>
-            
+
             {/* العمود الأيمن - لوحة تحكم مبسطة */}
             <div className="order-2 lg:order-2">
               <div className="bg-white rounded-2xl p-6 shadow-lg transform hover:scale-105 rotate-2 transition-transform duration-300">
                 {/* Header with dots and title */}
                 <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-gray-700 font-bold text-lg">لوحة المعلومات</h3>
+                  <h3 className="text-gray-700 font-bold text-lg">
+                    لوحة المعلومات
+                  </h3>
                   <div className="flex gap-2">
                     <div className="w-3 h-3 bg-red-500 rounded-full"></div>
                     <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
@@ -79,14 +99,22 @@ export function HomePage({ onNavigate }: HomePageProps) {
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   {/* Total beneficiaries card */}
                   <div className="bg-blue-100 rounded-lg p-4 text-center">
-                    <div className="text-blue-600 font-bold text-3xl mb-1">127</div>
-                    <div className="text-blue-700 text-sm font-medium">إجمالي المستفيدين</div>
+                    <div className="text-blue-600 font-bold text-3xl mb-1">
+                      127
+                    </div>
+                    <div className="text-blue-700 text-sm font-medium">
+                      إجمالي المستفيدين
+                    </div>
                   </div>
-                  
+
                   {/* Improvement rate card */}
                   <div className="bg-green-100 rounded-lg p-4 text-center">
-                    <div className="text-green-600 font-bold text-3xl mb-1">89%</div>
-                    <div className="text-green-700 text-sm font-medium">نسبة التحسن</div>
+                    <div className="text-green-600 font-bold text-3xl mb-1">
+                      89%
+                    </div>
+                    <div className="text-green-700 text-sm font-medium">
+                      نسبة التحسن
+                    </div>
                   </div>
                 </div>
 
@@ -94,18 +122,21 @@ export function HomePage({ onNavigate }: HomePageProps) {
                 <div className="bg-gray-50 rounded-lg p-4">
                   <div className="h-32">
                     <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={barData.slice().reverse()} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
-                        <XAxis 
-                          dataKey="name" 
+                      <LineChart
+                        data={barData.slice().reverse()}
+                        margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
+                      >
+                        <XAxis
+                          dataKey="name"
                           tick={{ fontSize: 10, fill: '#6b7280' }}
                           axisLine={false}
                           tickLine={false}
                         />
                         <YAxis hide />
-                        <Line 
+                        <Line
                           type="monotone"
-                          dataKey="المستفيدون" 
-                          stroke="#18325a" 
+                          dataKey="المستفيدون"
+                          stroke="#18325a"
                           strokeWidth={3}
                           dot={{ fill: '#18325a', strokeWidth: 2, r: 4 }}
                           activeDot={{ r: 6, fill: '#18325a' }}
@@ -121,18 +152,26 @@ export function HomePage({ onNavigate }: HomePageProps) {
       </section>
 
       {/* قسم رسالتنا */}
-      <section id="mission" className="bg-[rgba(255,255,255,1)] py-12 md:py-20 px-4 md:px-6">
+      <section
+        id="mission"
+        className="bg-[rgba(255,255,255,1)] py-12 md:py-20 px-4 md:px-6"
+      >
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-[rgba(24,50,90,1)] font-bold text-2xl md:text-3xl lg:text-4xl mb-6 md:mb-8 text-center">رسالتنا</h2>
-          
+          <h2 className="text-[rgba(24,50,90,1)] font-bold text-2xl md:text-3xl lg:text-4xl mb-6 md:mb-8 text-center">
+            رسالتنا
+          </h2>
+
           <p className="text-[rgba(24,50,90,1)] opacity-90 leading-relaxed text-center text-base md:text-lg mb-8 md:mb-12">
-            في سحابة الأثر نؤمن أن التغيير الإيجابي يبدأ من القدرة على قياسه وفهمه. لذلك، نعمل على تمكين المنظمات والمؤسسات العربية من
+            في سحابة الأثر نؤمن أن التغيير الإيجابي يبدأ من القدرة على قياسه
+            وفهمه. لذلك، نعمل على تمكين المنظمات والمؤسسات العربية من
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-12 md:mb-16">
             {/* تخطيط الأثر */}
             <div className="bg-white rounded-2xl p-4 md:p-6 shadow-lg border border-gray-200 hover:shadow-xl transition-all text-center">
-              <h3 className="text-brand-primary font-bold text-base md:text-lg mb-2 md:mb-3">تخطيط الأثر</h3>
+              <h3 className="text-brand-primary font-bold text-base md:text-lg mb-2 md:mb-3">
+                تخطيط الأثر
+              </h3>
               <p className="text-brand-primary opacity-80 leading-relaxed text-sm md:text-base">
                 تحديد الأهداف الاستراتيجية ورسم خارطة طريق واضحة لرحلة التغيير.
               </p>
@@ -140,41 +179,56 @@ export function HomePage({ onNavigate }: HomePageProps) {
 
             {/* تصميم المبادرات */}
             <div className="bg-white rounded-2xl p-4 md:p-6 shadow-lg border border-gray-200 hover:shadow-xl transition-all text-center">
-              <h3 className="text-brand-primary font-bold text-base md:text-lg mb-2 md:mb-3">تصميم المبادرات</h3>
+              <h3 className="text-brand-primary font-bold text-base md:text-lg mb-2 md:mb-3">
+                تصميم المبادرات
+              </h3>
               <p className="text-brand-primary opacity-80 leading-relaxed text-sm md:text-base">
-                تطوير برامج ومشاريع فعّالة تستجيب للتحديات الاجتماعية والاقتصادية والبيئية.
+                تطوير برامج ومشاريع فعّالة تستجيب للتحديات الاجتماعية
+                والاقتصادية والبيئية.
               </p>
             </div>
 
             {/* قياس الأثر */}
             <div className="bg-white rounded-2xl p-4 md:p-6 shadow-lg border border-gray-200 hover:shadow-xl transition-all text-center">
-              <h3 className="text-brand-primary font-bold text-base md:text-lg mb-2 md:mb-3">قياس الأثر</h3>
+              <h3 className="text-brand-primary font-bold text-base md:text-lg mb-2 md:mb-3">
+                قياس الأثر
+              </h3>
               <p className="text-brand-primary opacity-80 leading-relaxed text-sm md:text-base">
-                استخدام أدوات سحابية متقدمة لقياس النتائج بدقة وتحويل البيانات إلى رؤى قابلة للتنفيذ.
+                استخدام أدوات سحابية متقدمة لقياس النتائج بدقة وتحويل البيانات
+                إلى رؤى قابلة للتنفيذ.
               </p>
             </div>
 
             {/* بناء حلول مستدامة */}
             <div className="bg-white rounded-2xl p-4 md:p-6 shadow-lg border border-gray-200 hover:shadow-xl transition-all text-center">
-              <h3 className="text-brand-primary font-bold text-base md:text-lg mb-2 md:mb-3">بناء حلول مستدامة</h3>
+              <h3 className="text-brand-primary font-bold text-base md:text-lg mb-2 md:mb-3">
+                بناء حلول مستدامة
+              </h3>
               <p className="text-brand-primary opacity-80 leading-relaxed text-sm md:text-base">
-                المساهمة في إحداث تغيير حقيقي ومستمر يخدم المجتمع ويواجه التحديات المعاصرة.
+                المساهمة في إحداث تغيير حقيقي ومستمر يخدم المجتمع ويواجه
+                التحديات المعاصرة.
               </p>
             </div>
           </div>
 
           {/* الهدف */}
           <div className="text-center bg-[rgba(24,50,90,0)]">
-            <h3 className="text-[rgba(24,50,90,1)] font-bold text-xl md:text-2xl mb-4 md:mb-6">هدفنا</h3>
+            <h3 className="text-[rgba(24,50,90,1)] font-bold text-xl md:text-2xl mb-4 md:mb-6">
+              هدفنا
+            </h3>
             <p className="text-[rgba(24,50,90,1)] opacity-90 leading-relaxed max-w-4xl mx-auto text-base md:text-lg">
-              نساعد المنظمات على تخطيط وتصميم وقياس الأثر لنشهد حلول مستدامة للتحديات الاجتماعية والاقتصادية والبيئية التي تواجه مجتمعنا
+              نساعد المنظمات على تخطيط وتصميم وقياس الأثر لنشهد حلول مستدامة
+              للتحديات الاجتماعية والاقتصادية والبيئية التي تواجه مجتمعنا
             </p>
           </div>
         </div>
       </section>
 
       {/* قسم الخدمات */}
-      <section id="services" className="bg-[rgba(24,50,90,1)] py-12 md:py-20 px-4 md:px-6">
+      <section
+        id="services"
+        className="bg-[rgba(24,50,90,1)] py-12 md:py-20 px-4 md:px-6"
+      >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-10 md:mb-16">
             <h2 className="text-[rgba(255,255,255,1)] font-bold text-2xl md:text-3xl lg:text-4xl mb-3 md:mb-4">
@@ -184,55 +238,115 @@ export function HomePage({ onNavigate }: HomePageProps) {
               كل خدمة خطوة نحو تغيير مستدام
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 md:gap-8">
             {/* استبيانات */}
             <div className="bg-white rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border-t-4 border-t-brand-primary">
               <div className="w-12 h-12 md:w-16 md:h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4 md:mb-6 mx-auto">
-                <svg className="w-6 h-6 md:w-8 md:h-8 text-brand-primary" fill="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="w-6 h-6 md:w-8 md:h-8 text-brand-primary"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
                 </svg>
               </div>
-              <h3 className="text-brand-primary font-bold text-lg md:text-xl mb-3 md:mb-4 text-center">استبيانات</h3>
-              <p className="text-gray-600 text-center leading-relaxed text-sm md:text-base">تصميم وإدارة استبيانات ذكية لجمع البيانات بطريقة منهجية وفعّالة</p>
+              <h3 className="text-brand-primary font-bold text-lg md:text-xl mb-3 md:mb-4 text-center">
+                استبيانات
+              </h3>
+              <p className="text-gray-600 text-center leading-relaxed text-sm md:text-base">
+                تصميم وإدارة استبيانات ذكية لجمع البيانات بطريقة منهجية وفعّالة
+              </p>
             </div>
-            
+
             {/* تحليلات */}
             <div className="bg-white rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border-t-4 border-t-brand-primary">
               <div className="w-12 h-12 md:w-16 md:h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4 md:mb-6 mx-auto">
-                <svg className="w-6 h-6 md:w-8 md:h-8 text-brand-primary" fill="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="w-6 h-6 md:w-8 md:h-8 text-brand-primary"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M22,21H2V3H4V19H6V17H10V19H12V16H16V19H18V17H22V21M16,8H18V15H16V8M12,2H14V15H12V2M8,13H10V15H8V13M4,18H6V15H4V18Z" />
                 </svg>
               </div>
-              <h3 className="text-brand-primary font-bold text-lg md:text-xl mb-3 md:mb-4 text-center">تحليلات</h3>
-              <p className="text-gray-600 text-center leading-relaxed text-sm md:text-base">تحليل البيانات المتقدمة لإستخراج رؤى عميقة وفهم الاتجاهات</p>
+              <h3 className="text-brand-primary font-bold text-lg md:text-xl mb-3 md:mb-4 text-center">
+                تحليلات
+              </h3>
+              <p className="text-gray-600 text-center leading-relaxed text-sm md:text-base">
+                تحليل البيانات المتقدمة لإستخراج رؤى عميقة وفهم الاتجاهات
+              </p>
             </div>
-            
+
             {/* قياس الأثر */}
             <div className="bg-white rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border-t-4 border-t-brand-primary">
               <div className="w-12 h-12 md:w-16 md:h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4 md:mb-6 mx-auto">
-                <svg className="w-6 h-6 md:w-8 md:h-8 text-brand-primary" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path d="M3 12a9 9 0 1 1 18 0" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M6 12a6 6 0 1 1 12 0" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" opacity="0.7" />
-                  <path d="M9 12a3 3 0 1 1 6 0" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" opacity="0.5" />
-                  <path d="M12 12l-2-4" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" />
+                <svg
+                  className="w-6 h-6 md:w-8 md:h-8 text-brand-primary"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M3 12a9 9 0 1 1 18 0"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M6 12a6 6 0 1 1 12 0"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.5"
+                    opacity="0.7"
+                  />
+                  <path
+                    d="M9 12a3 3 0 1 1 6 0"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1"
+                    opacity="0.5"
+                  />
+                  <path
+                    d="M12 12l-2-4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2.5"
+                  />
                   <circle cx="12" cy="12" r="1" fill="currentColor" />
-                  <path d="M8 16l1-1M16 16l-1-1M4 8l1 1M20 8l-1 1" strokeLinecap="round" strokeWidth="1.5" opacity="0.6" />
+                  <path
+                    d="M8 16l1-1M16 16l-1-1M4 8l1 1M20 8l-1 1"
+                    strokeLinecap="round"
+                    strokeWidth="1.5"
+                    opacity="0.6"
+                  />
                 </svg>
               </div>
-              <h3 className="text-brand-primary font-bold text-lg md:text-xl mb-3 md:mb-4 text-center">قياس الأثر</h3>
-              <p className="text-gray-600 text-center leading-relaxed text-sm md:text-base">قياس الأثر الاجتماعي والاقتصادي بمعايير علمية موثقة</p>
+              <h3 className="text-brand-primary font-bold text-lg md:text-xl mb-3 md:mb-4 text-center">
+                قياس الأثر
+              </h3>
+              <p className="text-gray-600 text-center leading-relaxed text-sm md:text-base">
+                قياس الأثر الاجتماعي والاقتصادي بمعايير علمية موثقة
+              </p>
             </div>
-            
+
             {/* تقارير تفاعلية */}
             <div className="bg-white rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border-t-4 border-t-brand-primary">
               <div className="w-12 h-12 md:w-16 md:h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4 md:mb-6 mx-auto">
-                <svg className="w-6 h-6 md:w-8 md:h-8 text-brand-primary" fill="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="w-6 h-6 md:w-8 md:h-8 text-brand-primary"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M3,3H21C21.53,3 22,3.47 22,4V16C22,16.53 21.53,17 21,17H7L3,21V4C3,3.47 3.47,3 4,3H3M6,7V9H18V7H6M6,11V13H15V11H6Z" />
                 </svg>
               </div>
-              <h3 className="text-brand-primary font-bold text-lg md:text-xl mb-3 md:mb-4 text-center">تقارير تفاعلية</h3>
-              <p className="text-gray-600 text-center leading-relaxed text-sm md:text-base">تقارير ديناميكية وتفاعلية تساعد في عرض النتائج بوضوح</p>
+              <h3 className="text-brand-primary font-bold text-lg md:text-xl mb-3 md:mb-4 text-center">
+                تقارير تفاعلية
+              </h3>
+              <p className="text-gray-600 text-center leading-relaxed text-sm md:text-base">
+                تقارير ديناميكية وتفاعلية تساعد في عرض النتائج بوضوح
+              </p>
             </div>
 
             {/* برق - المساعد الذكي */}
@@ -240,8 +354,12 @@ export function HomePage({ onNavigate }: HomePageProps) {
               <div className="w-12 h-12 md:w-16 md:h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4 md:mb-6 mx-auto">
                 <Bot className="w-6 h-6 md:w-8 md:h-8 text-brand-primary" />
               </div>
-              <h3 className="text-brand-primary font-bold text-lg md:text-xl mb-3 md:mb-4 text-center">برق</h3>
-              <p className="text-gray-600 text-center leading-relaxed text-sm md:text-base">مساعدك بالذكاء الاصطناعي لاكتشاف رؤى عميقة تعزز نجاحك</p>
+              <h3 className="text-brand-primary font-bold text-lg md:text-xl mb-3 md:mb-4 text-center">
+                برق
+              </h3>
+              <p className="text-gray-600 text-center leading-relaxed text-sm md:text-base">
+                مساعدك بالذكاء الاصطناعي لاكتشاف رؤى عميقة تعزز نجاحك
+              </p>
             </div>
           </div>
         </div>
@@ -254,9 +372,10 @@ export function HomePage({ onNavigate }: HomePageProps) {
             كن أول من يساهمون فى صناعة الأثر
           </h2>
           <p className="text-gray-600 text-base md:text-lg mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed">
-            كن من أوائل المنظمات التي ستستخدم سحابة الأثر لقياس وإدارة أثرها الاجتماعي
+            كن من أوائل المنظمات التي ستستخدم سحابة الأثر لقياس وإدارة أثرها
+            الاجتماعي
           </p>
-          <button 
+          <button
             onClick={() => onNavigate('register')}
             className="bg-brand-primary text-white px-8 md:px-12 py-3 md:py-4 rounded-xl hover:opacity-90 transition-all transform hover:scale-105 shadow-lg font-bold text-base md:text-lg cursor-pointer"
           >
@@ -269,11 +388,11 @@ export function HomePage({ onNavigate }: HomePageProps) {
       <footer className="bg-brand-primary py-8 md:py-12 px-4 md:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
-            <img 
-              src={logoImage} 
-              alt="سحابة الأثر" 
-              style={{ display: "block", margin: "0 auto" }}
-              className="h-12 w-auto md:h-16 lg:h-18 object-contain" 
+            <img
+              src={logoImage}
+              alt="سحابة الأثر"
+              style={{ display: 'block', margin: '0 auto' }}
+              className="h-12 w-auto md:h-16 lg:h-18 object-contain"
             />
             <p className="text-white opacity-90 mb-4 md:mb-6 text-sm md:text-base">
               مدعومة من أثرنا
