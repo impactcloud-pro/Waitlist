@@ -1,11 +1,14 @@
 import { serve } from "https://deno.land/std@1.369.0/http/server.ts";
 import { Resend } from "npm:resend";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
-};
+const kv = await Deno.openKv();
+const allowedOrigins = (Deno.env.get("ALLOWED_ORIGINS") ?? "")
+  .split(",")
+  .map((o) => o.trim())
+  .filter(Boolean);
+const functionSecret = Deno.env.get("FUNCTION_SECRET");
+const RATE_LIMIT_MAX = Number(Deno.env.get("RATE_LIMIT_MAX") ?? "5");
+const RATE_LIMIT_WINDOW = Number(Deno.env.get("RATE_LIMIT_WINDOW") ?? "60");
 
 interface EmailRequest {
   name: string;
@@ -14,9 +17,51 @@ interface EmailRequest {
 }
 
 serve(async (req: Request): Promise<Response> => {
+  const origin = req.headers.get("Origin") ?? "";
+  if (!allowedOrigins.includes(origin)) {
+    return new Response(
+      JSON.stringify({ error: "Origin not allowed" }),
+      {
+        status: 403,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+  }
+
+  const corsHeaders = {
+    "Access-Control-Allow-Origin": origin,
+    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  };
+
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  const authHeader = req.headers.get("Authorization") ?? "";
+  if (!functionSecret || authHeader !== `Bearer ${functionSecret}`) {
+    return new Response(
+      JSON.stringify({ error: "Unauthorized" }),
+      {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      },
+    );
+  }
+
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "unknown";
+  const rateLimitKey = ["rate_limit", ip];
+  const { value } = await kv.get<number>(rateLimitKey);
+  if ((value ?? 0) >= RATE_LIMIT_MAX) {
+    return new Response(
+      JSON.stringify({ error: "Too many requests" }),
+      {
+        status: 429,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      },
+    );
+  }
+  await kv.set(rateLimitKey, (value ?? 0) + 1, { expireIn: RATE_LIMIT_WINDOW * 1000 });
 
   if (req.method !== "POST") {
     return new Response(
