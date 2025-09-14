@@ -1,4 +1,6 @@
-import logoImage from '/1.png'; 
+import logoImage from '/1.png';
+
+/** Top navigation bar used across the application. */
 interface NavbarProps {
   onNavigate: (page: 'home' | 'register' | 'thank-you') => void;
   currentPage: 'home' | 'register' | 'thank-you';
@@ -35,33 +37,33 @@ export function Navbar({ onNavigate, currentPage }: NavbarProps) {
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* الشعار في اليمين */}
         <div className="flex-shrink-0">
-          <button 
+          <button
             onClick={scrollToTop}
             className="text-brand-primary hover:opacity-80 transition-opacity cursor-pointer"
           >
-            <img 
-              src={logoImage} 
-              alt="سحابة الأثر" 
-              className="h-12 w-auto md:h-16 lg:h-18 object-contain" 
+            <img
+              src={logoImage}
+              alt="سحابة الأثر"
+              className="h-12 w-auto md:h-16 lg:h-18 object-contain"
             />
           </button>
         </div>
-        
+
         {/* الروابط في اليسار */}
         <div className="flex space-x-2 md:space-x-6 space-x-reverse items-center">
-          <button 
+          <button
             onClick={() => scrollToSection('mission')}
             className="text-brand-primary hover:opacity-80 transition-opacity px-2 md:px-4 py-2 font-bold cursor-pointer text-sm md:text-base"
           >
             رسالتنا
           </button>
-          <button 
+          <button
             onClick={() => scrollToSection('services')}
             className="text-brand-primary hover:opacity-80 transition-opacity px-2 md:px-4 py-2 font-bold cursor-pointer text-sm md:text-base"
           >
             خدماتنا
           </button>
-          <button 
+          <button
             onClick={() => onNavigate('register')}
             className={`bg-brand-primary text-white hover:opacity-90 transition-opacity px-3 md:px-6 py-2 rounded-lg font-bold cursor-pointer text-sm md:text-base ${
               currentPage === 'register' ? 'opacity-100 shadow-lg' : ''

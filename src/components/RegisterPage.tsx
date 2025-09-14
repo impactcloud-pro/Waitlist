@@ -1,9 +1,13 @@
 import logoImage from '/5.png';
 import { useState } from 'react';
-import { ChevronDown } from "lucide-react";
-import { submitRegistration, type RegistrationData } from '../services/registrationService';
+import { ChevronDown } from 'lucide-react';
+import {
+  submitRegistration,
+  type RegistrationData,
+} from '../services/registrationService';
 import countries from '../data/countries';
 
+/** Sign-up form for the early-access waitlist. */
 interface RegisterPageProps {
   onNavigate: (page: 'home' | 'register' | 'thank-you') => void;
 }
@@ -14,46 +18,50 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
     email: '',
     phone: '',
     organization: '',
-    country: ''
+    country: '',
   });
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitMessage, setSubmitMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
-
+  const [submitMessage, setSubmitMessage] = useState<{
+    type: 'success' | 'error';
+    text: string;
+  } | null>(null);
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   // فلترة الدول حسب النص المكتوب
-  const filteredCountries = countries.filter(country =>
-    country.toLowerCase().includes(searchValue.toLowerCase()) ||
-    country.includes(searchValue)
+  const filteredCountries = countries.filter(
+    (country) =>
+      country.toLowerCase().includes(searchValue.toLowerCase()) ||
+      country.includes(searchValue)
   );
 
   const handleCountrySelect = (country: string) => {
-    setFormData(prev => ({ ...prev, country: country }));
+    setFormData((prev) => ({ ...prev, country: country }));
     setSearchValue(country);
     setIsOpen(false);
   };
 
   const handleCountryInputChange = (value: string) => {
     // فقط السماح بالقيم التي تطابق بداية أسماء الدول أو جزء منها
-    const hasPartialMatch = countries.some(country => 
-      country.startsWith(value) || 
-      country.toLowerCase().startsWith(value.toLowerCase()) ||
-      country.includes(value) ||
-      country.toLowerCase().includes(value.toLowerCase())
+    const hasPartialMatch = countries.some(
+      (country) =>
+        country.startsWith(value) ||
+        country.toLowerCase().startsWith(value.toLowerCase()) ||
+        country.includes(value) ||
+        country.toLowerCase().includes(value.toLowerCase())
     );
     if (hasPartialMatch || value === '') {
       setSearchValue(value);
       // فقط تحديث قيمة الدولة إذا كانت موجودة في القائمة بالضبط
       if (countries.includes(value)) {
-        setFormData(prev => ({ ...prev, country: value }));
+        setFormData((prev) => ({ ...prev, country: value }));
       } else {
         // إذا لم تكن موجودة بالضبط، امسح قيمة النموذج
-        setFormData(prev => ({ ...prev, country: '' }));
+        setFormData((prev) => ({ ...prev, country: '' }));
       }
       setIsOpen(value.length > 0);
     }
@@ -66,33 +74,33 @@ export function RegisterPage({ onNavigate }: RegisterPageProps) {
       alert('يرجى اختيار دولة من القائمة المتاحة');
       return;
     }
-    
+
     if (isSubmitting) return;
-    
+
     setIsSubmitting(true);
     setSubmitMessage(null);
-    
+
     try {
       const registrationData: RegistrationData = {
         name: formData.fullName,
         email: formData.email,
         phone: formData.phone,
         organization: formData.organization,
-        country: formData.country || searchValue
+        country: formData.country || searchValue,
       };
-      
+
       const result = await submitRegistration(registrationData);
-      
-if (result.success) {
+
+      if (result.success) {
         setSubmitMessage({ type: 'success', text: result.message });
         onNavigate('thank-you');
       } else {
         setSubmitMessage({ type: 'error', text: result.message });
       }
     } catch (error) {
-      setSubmitMessage({ 
-        type: 'error', 
-        text: 'حدث خطأ في الإرسال. يرجى المحاولة مرة أخرى.' 
+      setSubmitMessage({
+        type: 'error',
+        text: 'حدث خطأ في الإرسال. يرجى المحاولة مرة أخرى.',
       });
     } finally {
       setIsSubmitting(false);
@@ -117,20 +125,24 @@ if (result.success) {
       <section className="bg-gray-50 py-12 md:py-16 px-4 md:px-6">
         <div className="max-w-2xl mx-auto">
           <div className="bg-white rounded-3xl p-6 md:p-10 shadow-xl border border-gray-100">
-            <h2 className="text-brand-primary font-bold text-2xl md:text-3xl mb-8 md:mb-10 text-center">بيانات التسجيل</h2>
-            
+            <h2 className="text-brand-primary font-bold text-2xl md:text-3xl mb-8 md:mb-10 text-center">
+              بيانات التسجيل
+            </h2>
+
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* رسالة النجاح أو الخطأ */}
               {submitMessage && (
-                <div className={`p-4 rounded-xl text-center font-medium ${
-                  submitMessage.type === 'success' 
-                    ? 'bg-green-100 text-green-800 border border-green-200' 
-                    : 'bg-red-100 text-red-800 border border-red-200'
-                }`}>
+                <div
+                  className={`p-4 rounded-xl text-center font-medium ${
+                    submitMessage.type === 'success'
+                      ? 'bg-green-100 text-green-800 border border-green-200'
+                      : 'bg-red-100 text-red-800 border border-red-200'
+                  }`}
+                >
                   {submitMessage.text}
                 </div>
               )}
-              
+
               {/* الاسم الكامل */}
               <div>
                 <label className="block text-brand-primary mb-3 font-bold text-lg text-right">
@@ -139,7 +151,9 @@ if (result.success) {
                 <input
                   type="text"
                   value={formData.fullName}
-                  onChange={(e) => handleInputChange('fullName', e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange('fullName', e.target.value)
+                  }
                   className="w-full h-14 px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all text-lg bg-gray-50 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
                   placeholder="أدخل اسمك الكامل"
                   disabled={isSubmitting}
@@ -187,7 +201,9 @@ if (result.success) {
                 <input
                   type="text"
                   value={formData.organization}
-                  onChange={(e) => handleInputChange('organization', e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange('organization', e.target.value)
+                  }
                   className="w-full h-14 px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all text-lg bg-gray-50 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
                   placeholder="أدخل اسم المنظمة"
                   disabled={isSubmitting}
@@ -214,12 +230,10 @@ if (result.success) {
                     disabled={isSubmitting}
                     required
                   />
-                  <ChevronDown 
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" 
-                  />
-                  
+                  <ChevronDown className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
+
                   {isOpen && filteredCountries.length > 0 && (
-                    <div 
+                    <div
                       className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto"
                       dir="rtl"
                     >
@@ -232,8 +246,7 @@ if (result.success) {
                           {country}
                         </div>
                       ))}
-            
-                        </div>
+                    </div>
                   )}
                 </div>
               </div>
@@ -254,28 +267,23 @@ if (result.success) {
                     'إرسال طلب التسجيل'
                   )}
                 </button>
-
               </div>
             </form>
           </div>
         </div>
       </section>
 
-
-
       {/* الفوتر */}
       <footer className="bg-brand-primary py-12 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
-          <img 
-              src={logoImage} 
-              alt="سحابة الأثر" 
-              style={{ display: "block", margin: "0 auto" }}
-              className="h-12 w-auto md:h-16 lg:h-18 object-contain" 
+            <img
+              src={logoImage}
+              alt="سحابة الأثر"
+              style={{ display: 'block', margin: '0 auto' }}
+              className="h-12 w-auto md:h-16 lg:h-18 object-contain"
             />
-            <p className="text-white opacity-90 mb-6">
-              مدعومة من أثرنا
-            </p>
+            <p className="text-white opacity-90 mb-6">مدعومة من أثرنا</p>
             <div className="border-t border-white border-opacity-20 pt-6">
               <p className="text-white opacity-70 text-sm">
                 © 2025 سحابة الأثر. جميع الحقوق محفوظة.
