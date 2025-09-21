@@ -63,6 +63,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "install": "npm install --legacy-peer-deps",
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "echo \"No tests configured\" && exit 0"
